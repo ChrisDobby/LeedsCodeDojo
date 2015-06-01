@@ -107,7 +107,7 @@ type DrawingForm(?drawing:Drawing3D) as x =
       loaded := true
       GL.ClearColor(Color.FromArgb(220, 225, 205))  
       GL.Enable(EnableCap.DepthTest)
-      timer() |> Async.Start
+      //timer() |> Async.Start
       x.Resize.Add(fun _ -> setupViewPort())
       setupViewPort()  )
     
@@ -240,7 +240,7 @@ module Fun =
   /// Creates a 3D cube of unit size using the current color
   let cube = DF (fun ctx ->
     GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Diffuse, ctx.Color)
-    GL.Begin(BeginMode.Quads)
+    GL.Begin(PrimitiveType.Quads)
     GLEx.Face 
       (-1.f, 0.f, 0.f) 
       [ (-0.5f, -0.5f, -0.5f); (-0.5f, -0.5f,  0.5f); 
@@ -271,7 +271,7 @@ module Fun =
   /// Generates a 3D cylinder object of a unit size
   let cylinder = DF (fun ctx ->
     GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Diffuse, ctx.Color)
-    GL.Begin(BeginMode.Triangles)
+    GL.Begin(PrimitiveType.Triangles)
     
     // points that will be used for generating the circle
     let q = float32 (Math.PI / (float quality / 2.0))
@@ -315,7 +315,7 @@ module Fun =
   /// Creates a 3D sphere with unit size
   let sphere = DF (fun ctx ->
     GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Diffuse, ctx.Color)
-    GL.Begin(BeginMode.Triangles)
+    GL.Begin(PrimitiveType.Triangles)
   
     // points that will be used for generating the circle
     let q = float32 (Math.PI / (float quality / 2.0))
@@ -356,7 +356,7 @@ module Fun =
   /// Generates a 3D cylinder object of a unit size
   let cone = DF (fun ctx ->
     GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Diffuse, ctx.Color)
-    GL.Begin(BeginMode.Triangles)
+    GL.Begin(PrimitiveType.Triangles)
     
     // points that will be used for generating the circle
     let q = float32 (Math.PI / (float quality / 2.0))
