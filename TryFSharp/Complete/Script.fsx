@@ -22,7 +22,7 @@ type ShapeDef =
         Colour : Color
     }
 
-let draw shapeDefs coords = 
+let draw coords shapeDefs = 
     let getDrawing shapeDef coords =
         let x, y, z = shapeDef.Coords |> coords
         match shapeDef.Shape with
@@ -37,6 +37,14 @@ let defaultCoords c = match c with | None -> (0., 0., 0.) | Some(xyz) -> xyz
 let moveDiagonal c = let x, y, z = c
                      (x - 0.5, y - 0.5, z)
 
-draw [{Shape = Cylinder (3., 1.); Coords = None; Colour = Color.AliceBlue}
-      {Shape = Cube 2.; Coords = Some(1., 1., 0.); Colour = Color.Gold}] 
-     (defaultCoords >> moveDiagonal)
+type Shapes = JsonProvider<"shapes.json">
+let shapesList = Shapes.Load("shapes.json")
+
+shapesList |> Seq.map(fun s -> match s.Shape with
+                                | "Cylinder" -> {Shape = Cylinder(float s.Height, float s.Width); Coords = Some(float s.X, float s.Y, float s.Z); Colour = ColorTranslator.FromHtml(s.Colour)}
+                                | "Cone" -> {Shape = Cone(float s.Height, float s.Width); Coords = Some(float s.X, float s.Y, float s.Z); Colour = ColorTranslator.FromHtml(s.Colour)}
+                                | "Cuboid" -> {Shape = Cuboid(float s.Height, float s.Width, float s.Depth); Coords = Some(float s.X, float s.Y, float s.Z);Colour = ColorTranslator.FromHtml(s.Colour)}
+                                | _ -> {Shape = Cube 0.; Coords = None; Colour = Color.Red})
+           |> Seq.toList
+           |> draw defaultCoords
+     
